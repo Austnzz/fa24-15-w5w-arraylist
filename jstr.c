@@ -26,12 +26,21 @@ String plus(String s1, String s2) {
 }
 
 String join(String strs[], int count, String delimiter) {
-    String s = new_String("");
+    int total_length = 0;
     for(int i = 0; i < count; i += 1) {
-        s = plus(s, strs[i]);
-        if(i < count - 1) {
-            s = plus(s, delimiter);
-        }
+        total_length += strs[i].length;
+        if(i < count - 1) { total_length += delimiter.length; }
     }
-    return s;
+    char* new_contents = malloc(total_length + 1);
+    int index = 0;
+    for(int i = 0; i < count; i += 1) {
+        strcpy(new_contents + index, strs[i].contents);
+        if(i < count - 1) {
+            strcpy(new_contents + index + strs[i].length, delimiter.contents);
+        }
+        index += strs[i].length + delimiter.length;
+    }
+    new_contents[total_length - 1] = 0;
+    String r = { total_length, new_contents };
+    return r;
 }

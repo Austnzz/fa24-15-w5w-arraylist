@@ -32,7 +32,15 @@ void append1(List *a, String value) {
 
 String to_string(List a) {
     String joined = join(a.contents, a.size, new_String(", "));
-    return plus(new_String("["), plus(joined, new_String("]")));
+    String bracket = new_String("[");
+    String cbracket = new_String("]");
+    String withbrack = plus(bracket, joined);
+    String ret = plus(withbrack, cbracket);
+    free(bracket.contents);
+    free(cbracket.contents);
+    free(joined.contents);
+    free(withbrack.contents);
+    return ret;
 }
 
 int main() {
@@ -42,5 +50,12 @@ int main() {
     append1(&a, new_String("cranberry"));
     append1(&a, new_String("doughnut"));
 
-    printf("%s\n", to_string(a).contents);
+    String astr = to_string(a);
+    printf("%s\n", astr.contents);
+
+    free(a.contents);
+    for(int i = 0; i < a.size; i += 1) {
+        free(a.contents[i].contents);
+    }
+    free(astr.contents);
 }
